@@ -607,7 +607,10 @@ namespace Ionic.Zip
             return _InternalAddEntry(ze);
         }
 
-
+        public void AddExistingEntry(ZipEntry zipEntry)
+        {
+            InternalAddEntry(zipEntry.FileName, zipEntry);
+        }
 
         private ZipEntry _InternalAddEntry(ZipEntry ze)
         {
