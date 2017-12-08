@@ -680,6 +680,8 @@ namespace Ionic.Zip
 
         private bool WantReadAgain()
         {
+            return false;
+            /*
             if (_UncompressedSize < 0x10) return false;
             if (_CompressionMethod == 0x00) return false;
             if (CompressionLevel == Ionic.Zlib.CompressionLevel.None) return false;
@@ -692,8 +694,7 @@ namespace Ionic.Zip
 #endif
 
             if (_zipCrypto_forWrite != null && (CompressedSize - 12) <= UncompressedSize) return false;
-
-            return true;
+            */
         }
 
 
