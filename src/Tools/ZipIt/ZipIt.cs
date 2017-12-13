@@ -248,11 +248,13 @@ namespace Ionic.Zip.Examples
                                 if (args.Length <= i) Usage();
                                 switch(args[i].ToLower())
                                 {
+#if BZIP
                                     case "b":
                                     case "bzip":
                                     case "bzip2":
                                         zip.CompressionMethod = CompressionMethod.BZip2;
                                         break;
+#endif
                                     case "d":
                                     case "deflate":
                                         zip.CompressionMethod = CompressionMethod.Deflate;

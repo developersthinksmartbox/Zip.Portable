@@ -1757,6 +1757,7 @@ namespace Ionic.Zip.Tests
 
 
 
+#if BZIP
         [TestMethod]
         public void Winzip_Unzip_Bzip2()
         {
@@ -1840,7 +1841,6 @@ namespace Ionic.Zip.Tests
             VerifyFileTimes1(extractDir, additionalFiles);
         }
 
-
         [TestMethod]
         public void Winzip_Unzip_Bzip2_Large()
         {
@@ -1897,6 +1897,7 @@ namespace Ionic.Zip.Tests
             this.Exec(wzunzip, String.Format("-d -yx \"{0}\"",
                                              Path.Combine("..",zipFileToCreate)));
         }
+#endif
 
 
 

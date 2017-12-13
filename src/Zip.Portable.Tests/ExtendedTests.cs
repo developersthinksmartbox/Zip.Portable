@@ -118,7 +118,7 @@ namespace Ionic.Zip.Tests.Extended
 
 
 
-
+#if BZIP
         [TestCategory("NotForCI")]
         [TestMethod]
         [Timeout(22 * 60*1000)]
@@ -256,7 +256,7 @@ namespace Ionic.Zip.Tests.Extended
                           "Parallel compression is not within 5% of normal filesize.");
             TestContext.WriteLine("A-ok");
         }
-
+#endif
 
 
 
