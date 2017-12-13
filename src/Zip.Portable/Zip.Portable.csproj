@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;AESCRYPTO_todo;BZIP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;AESCRYPTO_todo</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -29,14 +29,14 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;AESCRYPTO_todo;BZIP</DefineConstants>
+    <DefineConstants>TRACE;AESCRYPTO_todo</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(SignAssembly)' == 'true' ">
     <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
     <OutputPath>$(OutputPath)Signed\</OutputPath>
-	<AssemblyOriginatorKeyFile>..\Zlib.Portable.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Zlib.Portable.snk</AssemblyOriginatorKeyFile>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(SignAssembly)' != 'true' ">
@@ -71,12 +71,6 @@
     <Compile Include="ZipInputStream.cs" />
     <Compile Include="ZipOutputStream.cs" />
     <Compile Include="ZipSegmentedStream.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BZip2.Portable\BZip2.Portable.csproj">
-      <Project>{eb303953-366f-438f-9958-d282b05ddcba}</Project>
-      <Name>BZip2.Portable</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
