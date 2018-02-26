@@ -231,8 +231,12 @@ namespace Ionic.Zip
                 zde._VersionNeeded = (short)(block[i++] + block[i++] * 256);
                 zde._BitField = (short)(block[i++] + block[i++] * 256);
                 zde._CompressionMethod = (Int16)(block[i++] + block[i++] * 256);
-                zde._TimeBlob = block[i++] + block[i++] * 256 + block[i++] * 256 * 256 + block[i++] * 256 * 256 * 256;
-                zde._LastModified = Ionic.Zip.SharedUtilities.PackedToDateTime(zde._TimeBlob);
+
+                // parsing the time seems to take roughly 25% of the time taken to read the central directory, and we don't use this information anyway
+                i += 4;
+                // zde._TimeBlob = block[i++] + block[i++] * 256 + block[i++] * 256 * 256 + block[i++] * 256 * 256 * 256;
+                // zde._LastModified = Ionic.Zip.SharedUtilities.PackedToDateTime(zde._TimeBlob);
+
                 zde._timestamp |= ZipEntryTimestamp.DOS;
 
                 zde._Crc32 = block[i++] + block[i++] * 256 + block[i++] * 256 * 256 + block[i++] * 256 * 256 * 256;
