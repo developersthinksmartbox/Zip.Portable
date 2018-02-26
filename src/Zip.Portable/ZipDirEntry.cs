@@ -302,8 +302,18 @@ namespace Ionic.Zip
 
                 // Console.WriteLine("  Input uses Z64?:      {0}", zde._InputUsesZip64);
 
-                bytesRead += zde.ProcessExtraField(s, zde._extraFieldLength);
-                zde._CompressedFileDataSize = zde._CompressedSize;
+                if (zde._InputUsesZip64)
+                {
+                    // Zip64 stores compressed file data size in the extra field, which we need in order to read the file correctly
+                    bytesRead += zde.ProcessExtraField(s, zde._extraFieldLength);
+                    zde._CompressedFileDataSize = zde._CompressedSize;
+                }
+                else
+                {
+                    // other extra fields seem to be timestamps, which we don't need, so skip over it
+                    // strangely, it's faster to read the data than it is to seek past it - guess seeking must interfere with reading ahead
+                    bytesRead += s.Read(block, 0, zde._extraFieldLength);
+                }
             }
 
             // we've processed the extra field, so we know the encryption method is set now.
