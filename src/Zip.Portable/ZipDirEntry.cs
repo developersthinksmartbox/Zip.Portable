@@ -277,10 +277,15 @@ namespace Ionic.Zip
                 zde._metadataChanged = true;
             }
 
-            if (zde.AttributesIndicateDirectory)
-                zde.MarkAsDirectory();  // may append a slash to filename if nec.
-            // workitem 6898
-            else if (zde._FileNameInArchive.EndsWith("/")) zde.MarkAsDirectory();
+            bool fileNameIndicatesDirectory = zde._FileNameInArchive.EndsWith("/", StringComparison.Ordinal);
+            if (zde.AttributesIndicateDirectory || fileNameIndicatesDirectory)
+            {
+                zde._IsDirectory = true;
+                if (!fileNameIndicatesDirectory)
+                {
+					zde._FileNameInArchive += "/";
+                }
+            }
 
             zde._CompressedFileDataSize = zde._CompressedSize;
             if ((zde._BitField & 0x01) == 0x01)
