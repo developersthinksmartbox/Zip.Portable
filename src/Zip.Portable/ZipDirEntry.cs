@@ -220,10 +220,7 @@ namespace Ionic.Zip
             int n = s.Read(block, 0, 42);
             if (n != 42) return null;
             int i = 0;
-            ZipEntry zde = new ZipEntry();
-            zde.AlternateEncoding = expectedEncoding;
-            zde._Source = ZipEntrySource.ZipFile;
-            zde._container = new ZipContainer(zf);
+            ZipEntry zde = new ZipEntry(expectedEncoding, ZipEntrySource.ZipFile, new ZipContainer(zf));
 
             unchecked
             {

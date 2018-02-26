@@ -327,10 +327,6 @@ namespace Ionic.Zip
         /// </summary>
         void InternalExtractToStream(Stream outStream, string password, ZipContainer zipContainer, ZipEntrySource zipEntrySource, string fileName)
         {
-            // workitem 7958
-            if (zipContainer == null)
-                throw new BadStateException("This entry is an orphan");
-
             // workitem 10355
             if (zipContainer.ZipFile == null)
                 throw new InvalidOperationException("Use Extract() only with ZipFile.");

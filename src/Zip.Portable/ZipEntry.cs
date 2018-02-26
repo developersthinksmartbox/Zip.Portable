@@ -55,6 +55,17 @@ namespace Ionic.Zip
             AlternateEncodingUsage = ZipOption.Never;
         }
 
+        internal ZipEntry(System.Text.Encoding alternateEncoding, ZipEntrySource source, ZipContainer container)
+        {
+            _CompressionMethod = (Int16)CompressionMethod.Deflate;
+            _CompressionLevel = Ionic.Zlib.CompressionLevel.Default;
+            _Encryption = EncryptionAlgorithm.None;
+            _Source = source;
+            AlternateEncoding = alternateEncoding;
+            AlternateEncodingUsage = ZipOption.Never;
+            _container = container;
+        }
+
         /// <summary>
         ///   The time and date at which the file indicated by the <c>ZipEntry</c> was
         ///   last modified.
