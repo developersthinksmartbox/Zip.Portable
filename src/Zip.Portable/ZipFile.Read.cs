@@ -559,9 +559,7 @@ namespace Ionic.Zip
             // workitem 9214
             bool inputUsesZip64 = false;
             ZipEntry de;
-            // in lieu of hashset, use a dictionary
-            var previouslySeen = new Dictionary<String, object>();
-            while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen, block)) != null)
+            while ((de = ZipEntry.ReadDirEntry(zf, block)) != null)
             {
                 de.ResetDirEntry();
                 zf.OnReadEntry(true, null);
@@ -569,11 +567,10 @@ namespace Ionic.Zip
                 if (zf.Verbose)
                     zf.StatusMessageTextWriter.WriteLine("entry {0}", de.FileName);
 
-                zf._entries.Add(de.FileName,de);
+                zf._entries[de.FileName] = de;
 
                 // workitem 9214
                 if (de._InputUsesZip64) inputUsesZip64 = true;
-                previouslySeen.Add(de.FileName, null); // to prevent dupes
             }
 
             // workitem 9214; auto-set the zip64 flag
@@ -633,9 +630,7 @@ namespace Ionic.Zip
             try
             {
                 ZipEntry de;
-                // in lieu of hashset, use a dictionary
-                var previouslySeen = new Dictionary<String,Object>();
-                while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen, block)) != null)
+                while ((de = ZipEntry.ReadDirEntry(zf, block)) != null)
                 {
                     // Housekeeping: Since ZipFile exposes ZipEntry elements in the enumerator,
                     // we need to copy the comment that we grab from the ZipDirEntry
@@ -648,7 +643,6 @@ namespace Ionic.Zip
                         e1._Comment = de.Comment;
                         if (de.IsDirectory) e1.MarkAsDirectory();
                     }
-                    previouslySeen.Add(de.FileName,null); // to prevent dupes
                 }
 
                 // workitem 8299

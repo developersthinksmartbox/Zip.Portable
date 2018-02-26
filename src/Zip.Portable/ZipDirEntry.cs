@@ -178,13 +178,8 @@ namespace Ionic.Zip
         ///   UTF-8.
         /// </param>
         ///
-        /// <param name="previouslySeen">
-        ///   a list of previously seen entry names; used to prevent duplicates.
-        /// </param>
-        ///
         /// <returns>the entry read from the archive.</returns>
         internal static ZipEntry ReadDirEntry(ZipFile zf,
-                                              Dictionary<String,Object> previouslySeen,
                                               byte[] block)
         {
             System.IO.Stream s = zf.ReadStream;
@@ -267,14 +262,6 @@ namespace Ionic.Zip
             else
             {
                 zde._FileNameInArchive = Ionic.Zip.SharedUtilities.StringFromBuffer(block, zde._filenameLength, expectedEncoding);
-            }
-
-            // workitem 10330
-            // insure unique entry names
-            while (previouslySeen.ContainsKey(zde._FileNameInArchive))
-            {
-                zde._FileNameInArchive = CopyHelper.AppendCopyToFileName(zde._FileNameInArchive);
-                zde._metadataChanged = true;
             }
 
             bool fileNameIndicatesDirectory = zde._FileNameInArchive.EndsWith("/", StringComparison.Ordinal);
