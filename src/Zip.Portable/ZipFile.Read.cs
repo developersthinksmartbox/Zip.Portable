@@ -553,12 +553,15 @@ namespace Ionic.Zip
             // _diskNumberWithCd was set when originally finding the offset for the
             // start of the Central Directory.
 
+            // rather than allocating memory every time we want to read a directory header, filename or comment,
+            // allocate a buffer of the maximum permissible size for these (64k) and reuse it
+            var block = new byte[0x10000];
             // workitem 9214
             bool inputUsesZip64 = false;
             ZipEntry de;
             // in lieu of hashset, use a dictionary
-            var previouslySeen = new Dictionary<String,object>();
-            while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen)) != null)
+            var previouslySeen = new Dictionary<String, object>();
+            while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen, block)) != null)
             {
                 de.ResetDirEntry();
                 zf.OnReadEntry(true, null);
@@ -622,6 +625,8 @@ namespace Ionic.Zip
                 firstEntry = false;
             }
 
+            var block = new byte[0x10000];
+
             // read the zipfile's central directory structure here.
             // workitem 9912
             // But, because it may be corrupted, ignore errors.
@@ -630,7 +635,7 @@ namespace Ionic.Zip
                 ZipEntry de;
                 // in lieu of hashset, use a dictionary
                 var previouslySeen = new Dictionary<String,Object>();
-                while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen)) != null)
+                while ((de = ZipEntry.ReadDirEntry(zf, previouslySeen, block)) != null)
                 {
                     // Housekeeping: Since ZipFile exposes ZipEntry elements in the enumerator,
                     // we need to copy the comment that we grab from the ZipDirEntry

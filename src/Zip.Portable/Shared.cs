@@ -163,15 +163,15 @@ namespace Ionic.Zip
         //    return StringFromBuffer(buf, maxlength, ibm437);
         //}
 
-        internal static string Utf8StringFromBuffer(byte[] buf)
+        internal static string Utf8StringFromBuffer(byte[] buf, int length)
         {
-            return StringFromBuffer(buf, utf8);
+            return StringFromBuffer(buf, length, utf8);
         }
 
-        internal static string StringFromBuffer(byte[] buf, System.Text.Encoding encoding)
+        internal static string StringFromBuffer(byte[] buf, int length, System.Text.Encoding encoding)
         {
             // this form of the GetString() method is required for .NET CF compatibility
-            string s = encoding.GetString(buf, 0, buf.Length);
+            string s = encoding.GetString(buf, 0, length);
             return s;
         }
 

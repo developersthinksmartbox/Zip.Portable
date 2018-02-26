@@ -184,7 +184,8 @@ namespace Ionic.Zip
         ///
         /// <returns>the entry read from the archive.</returns>
         internal static ZipEntry ReadDirEntry(ZipFile zf,
-                                              Dictionary<String,Object> previouslySeen)
+                                              Dictionary<String,Object> previouslySeen,
+                                              byte[] block)
         {
             System.IO.Stream s = zf.ReadStream;
             System.Text.Encoding expectedEncoding = (zf.AlternateEncodingUsage == ZipOption.Always)
@@ -215,10 +216,9 @@ namespace Ionic.Zip
             }
 
             int bytesRead = 42 + 4;
-            byte[] block = new byte[42];
-            int n = s.Read(block, 0, block.Length);
-            if (n != block.Length) return null;
 
+            int n = s.Read(block, 0, 42);
+            if (n != 42) return null;
             int i = 0;
             ZipEntry zde = new ZipEntry();
             zde.AlternateEncoding = expectedEncoding;
@@ -259,18 +259,17 @@ namespace Ionic.Zip
 
             // workitem 7801
             zde.IsText = ((zde._InternalFileAttrs & 0x01) == 0x01);
+            n = s.Read(block, 0, zde._filenameLength);
 
-            block = new byte[zde._filenameLength];
-            n = s.Read(block, 0, block.Length);
             bytesRead += n;
             if ((zde._BitField & 0x0800) == 0x0800)
             {
                 // UTF-8 is in use
-                zde._FileNameInArchive = Ionic.Zip.SharedUtilities.Utf8StringFromBuffer(block);
+                zde._FileNameInArchive = Ionic.Zip.SharedUtilities.Utf8StringFromBuffer(block, zde._filenameLength);
             }
             else
             {
-                zde._FileNameInArchive = Ionic.Zip.SharedUtilities.StringFromBuffer(block, expectedEncoding);
+                zde._FileNameInArchive = Ionic.Zip.SharedUtilities.StringFromBuffer(block, zde._filenameLength, expectedEncoding);
             }
 
             // workitem 10330
@@ -342,18 +341,8 @@ namespace Ionic.Zip
 
             if (zde._commentLength > 0)
             {
-                block = new byte[zde._commentLength];
-                n = s.Read(block, 0, block.Length);
-                bytesRead += n;
-                if ((zde._BitField & 0x0800) == 0x0800)
-                {
-                    // UTF-8 is in use
-                    zde._Comment = Ionic.Zip.SharedUtilities.Utf8StringFromBuffer(block);
-                }
-                else
-                {
-                    zde._Comment = Ionic.Zip.SharedUtilities.StringFromBuffer(block, expectedEncoding);
-                }
+                bytesRead += s.Read(block, 0, zde._commentLength);
+                // don't care what the comment was
             }
             //zde._LengthOfDirEntry = bytesRead;
             return zde;
